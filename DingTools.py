@@ -22,14 +22,15 @@ class DingTools:
                 self.con.xpath('//*[@resource-id="com.alibaba.android.rimet:id/home_bottom_tab_button_work"]/android.widget.FrameLayout[1]/android.widget.ImageView[1]').click()
                 break
             except:
-                print('stop')
                 self._stop()
 
     def run(self):
         try:
+            print("-- 执行打卡程序... --")
             self.con(text="考勤打卡").click()
             self.con(text="上班打卡").click()
             self.con(text="上班打卡成功").get_text()
+            self.con.screenshot('success.jpg')
             self._stop()
             return True
         except:
@@ -37,13 +38,14 @@ class DingTools:
 
 
 _class = DingTools()
-run_interval = Interval("08:50:00", "9:00:00")
+run_interval = Interval("08:50:00", "09:00:00")
+now_localtime = time.strftime("%H:%M:%S", time.localtime())
+now_time = Interval(now_localtime, now_localtime)
 
 while True:
     now_time = time.strftime("%H:%M:%S", time.localtime())
     if now_time in run_interval:
         _class.word_check_init()
         res = _class.run()
-        print(res)
     time.sleep(5)
     print("loading...")
